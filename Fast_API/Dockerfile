@@ -1,0 +1,15 @@
+FROM python:3.9
+
+WORKDIR /home/app
+
+
+RUN apt install curl -y
+
+RUN curl -fsSL https://get.deta.dev/cli.sh | sh
+
+COPY requirements.txt /dependencies/requirements.txt
+RUN pip install -r /dependencies/requirements.txt
+
+COPY . /home/app
+
+CMD gunicorn main:app --bind 0.0.0.0:$PORT --worker-class uvicorn.workers.UvicornWorker
